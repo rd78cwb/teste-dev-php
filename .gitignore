@@ -1,0 +1,50 @@
+# Laravel
+/vendor
+/node_modules
+/public/storage
+/storage/*.key
+.env
+.env.*.local
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+/.vagrant
+
+# Laravel IDE Helper
+/_ide_helper.php
+/_ide_helper_models.php
+
+# Cache e logs
+/storage/framework/cache
+/storage/framework/sessions
+/storage/framework/views
+/storage/logs
+
+# Docker
+docker-compose.override.yml
+.env.docker
+data/
+*.pid
+
+# Composer
+composer.lock
+
+# NPM / Yarn
+package-lock.json
+yarn.lock
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+
+#Composer
+vendor/
