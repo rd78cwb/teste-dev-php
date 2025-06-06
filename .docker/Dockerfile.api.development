@@ -1,0 +1,22 @@
+FROM composer:latest AS composer_stage
+
+FROM php:8.3-fpm
+
+# Instala dependências de sistema
+RUN apt-get update && apt-get install -y \
+    git curl libpq-dev zip unzip libzip-dev libonig-dev \
+    && docker-php-ext-install pdo pdo_pgsql
+
+# Copia o Composer do stage anterior
+COPY --from=composer_stage /usr/bin/composer /usr/bin/composer
+
+# Copia o script de build
+COPY .docker/build.sh /build.sh
+RUN chmod +x /build.sh
+
+# Define o diretório de trabalho
+WORKDIR /var/www
+
+EXPOSE 9000
+
+CMD ["sh", "/build.sh"]
