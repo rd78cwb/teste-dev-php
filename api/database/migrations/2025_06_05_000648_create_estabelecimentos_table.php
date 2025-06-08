@@ -16,7 +16,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique('idx_estabelecimentos_uuid');
 
             $table->enum('tipo', ['cpf', 'cnpj']);
-            $table->string('documento', 14)->unique('idx_estabelecimentos_documento');
+            $table->string('documento', 14);
             $table->string('nome', 100);
             $table->string('contato', 100)->nullable();
             $table->string('email', 100)->nullable();
@@ -26,6 +26,7 @@ return new class extends Migration
             $table->softDeletes();
 
             //Indices
+            $table->index('nome', 'idx_estabelecimentos_documento');
             $table->index('nome', 'idx_estabelecimentos_nome');
             $table->index('telefone', 'idx_estabelecimentos_telefone');
         });
