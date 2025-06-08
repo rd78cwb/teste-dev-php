@@ -26,6 +26,8 @@ services:
     image: postgres:17
     restart: unless-stopped
     shm_size: 1GB                  # 1GB shared_buffers ⇒ /dev/shm 256 MB
+    ports:
+      - "5432:5432"
     environment:
         POSTGRES_USER: ${DB_USERNAME}
         POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -65,11 +67,11 @@ services:
       - laravel-net
       - laravel-net-db
     environment:
-      - DB_HOST=postgres
+      - DB_HOST=api_db
       - DB_PORT=5432
-      - DB_DATABASE=laravel
-      - DB_USERNAME=laravel
-      - DB_PASSWORD=secret
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
     expose:
       - "9000"
     command: sh /build.sh
