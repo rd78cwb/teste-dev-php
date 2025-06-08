@@ -40,6 +40,7 @@ abstract class ApiExternalController
             // Verifica se já existe no cache (TTL de 15 segundos)
             if (Cache::has($cacheKey)) {
                 $cached = Cache::get($cacheKey);
+                $cached['cache'] = true;
 
                 if (is_array($cached)) {
                     return $cached;
@@ -65,8 +66,9 @@ abstract class ApiExternalController
                 throw new \RuntimeException('Resposta inválida do serviço externo (JSON malformado)', 502);
             }
 
-            // Armazena no Redis por 15 segundos
-            Cache::put($cacheKey, $dados, now()->addSeconds(15));
+            // Armazena no Redis por 30 segundos
+            $dados['caches'] = Cache::put($cacheKey, $dados, now()->addSeconds(30));
+            $dados['cache'] = $cacheKey;
 
             return $dados;
 
