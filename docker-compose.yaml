@@ -20,6 +20,8 @@ services:
       - vol_api_redis:/data
     networks:
       - laravel-net-db
+    command: ["redis-server", "--stop-writes-on-bgsave-error", "no"]
+
 
   api_db:
     container_name: api_db
