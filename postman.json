@@ -1,0 +1,426 @@
+{
+	"info": {
+		"_postman_id": "88a88892-30a7-4a42-929b-6af88443f9ea",
+		"name": "Fornecedor API - teste",
+		"description": "Endpoints da API para gerenciar Fornecedores.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14182462"
+	},
+	"item": [
+		{
+			"name": "Fornecedores",
+			"item": [
+				{
+					"name": "Listar Estabelecimentos",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/estabelecimentos?sortBy=created_at&sortDir=desc&perPage=15",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"estabelecimentos"
+							],
+							"query": [
+								{
+									"key": "sortBy",
+									"value": "created_at",
+									"description": "Campo para ordenação (padrão: created_at)"
+								},
+								{
+									"key": "sortDir",
+									"value": "desc",
+									"description": "Direção da ordenação: 'asc' ou 'desc' (padrão: desc)"
+								},
+								{
+									"key": "perPage",
+									"value": "15",
+									"description": "Número de itens por página (padrão: 15)"
+								},
+								{
+									"key": "filter[nome]",
+									"value": "Nome Exemplo",
+									"description": "Exemplo de filtro: filter[nome]=Valor. Adicione mais conforme necessário.",
+									"disabled": true
+								},
+								{
+									"key": "filter[cpf_cnpj]",
+									"value": "12345678000199",
+									"description": "Exemplo de filtro: filter[cpf_cnpj]=Valor.",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Recupera uma lista paginada de fornecedores. Suporta filtros, ordenação e paginação.\n\nMétodo da Interface: `getAll(array $filters = [], string $sortBy = 'created_at', string $sortDir = 'desc', int $perPage = 15)`"
+					},
+					"response": []
+				},
+				{
+					"name": "Busca por ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/estabelecimentos/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"estabelecimentos",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "O ID do Fornecedor"
+								}
+							]
+						},
+						"description": "Recupera um fornecedor específico pelo seu ID.\n\nMétodo da Interface: `findById(int $id)`"
+					},
+					"response": []
+				},
+				{
+					"name": "Busca por Documento",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/estabelecimentos/by-cpf-cnpj/:cpfCnpj",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"estabelecimentos",
+								"by-cpf-cnpj",
+								":cpfCnpj"
+							],
+							"variable": [
+								{
+									"key": "cpfCnpj",
+									"value": "12345678000199",
+									"description": "O CPF ou CNPJ do Fornecedor"
+								}
+							]
+						},
+						"description": "Recupera um fornecedor específico pelo seu CPF/CNPJ.\n\nMétodo da Interface: `findByCpfCnpj(string $cpfCnpj)`"
+					},
+					"response": []
+				},
+				{
+					"name": "Criar Estabelecimento",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Novo Fornecedor SA\",\n    \"tipo\": \"cnpj\",\n    \"documento\": \"98765432000100\",\n    \"email\": \"contato@novofornecedor.com\",\n    \"telefone\": \"21988887777\",\n    \"endereco\": {\n        \"logradouro\": \"Rua Exemplo, 123\",\n        \"cidade\": \"Cidade Exemplo\",\n        \"estado\": \"EX\",\n        \"cep\": \"00000-000\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/estabelecimentos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"estabelecimentos"
+							]
+						},
+						"description": "Cria um novo fornecedor.\n\nMétodo da Interface: `create(array $data)`"
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Estabelecimentos",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Fornecedor Atualizado Ltda\",\n    \"email\": \"novo_email@fornecedor.com\",\n    \"telefone\": \"(11) 97777-6666\",\n    \"ativo\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/estabelecimentos/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"estabelecimentos",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3e8b90c2-04e1-4895-8df5-530776e63a53",
+									"description": "O ID do Fornecedor a ser atualizado"
+								}
+							]
+						},
+						"description": "Atualiza um fornecedor existente pelo seu ID.\n\nMétodo da Interface: `update(int $id, array $data)`"
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Fornecedor",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/estabelecimentos/:id",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"estabelecimentos",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3e8b90c2-04e1-4895-8df5-530776e63a53",
+									"description": "O ID do Fornecedor a ser deletado"
+								}
+							]
+						},
+						"description": "Deleta um fornecedor pelo seu ID.\n\nMétodo da Interface: `delete(int $id)`"
+					},
+					"response": []
+				}
+			],
+			"description": "Operações relacionadas a Fornecedores"
+		},
+		{
+			"name": "External",
+			"item": [
+				{
+					"name": "CEP - Brasil API",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/external/brasilapi/cep/:cep",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"external",
+								"brasilapi",
+								"cep",
+								":cep"
+							],
+							"variable": [
+								{
+									"key": "cep",
+									"value": "81330140"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CNPJ - Brasil API",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/external/brasilapi/cnpj/:cnpj",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"external",
+								"brasilapi",
+								"cnpj",
+								":cnpj"
+							],
+							"variable": [
+								{
+									"key": "cnpj",
+									"value": "19676475000120"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CEP - ViaCEP",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/external/viacep/cep/:cep",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"external",
+								"viacep",
+								"cep",
+								":cep"
+							],
+							"variable": [
+								{
+									"key": "cep",
+									"value": "81330140"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sistema",
+			"item": [
+				{
+					"name": "SIstema - Cache",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/sistema/config/cache",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"sistema",
+								"config",
+								"cache"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}
