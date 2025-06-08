@@ -12,7 +12,11 @@ services:
     container_name: api_redis
     image: redis:alpine
     restart: always
+    user: "1000:1000"
+    environment:
+      TZ: ${TZ}
     volumes:
+      - ./.docker/redis.conf:/usr/local/etc/redis/redis.conf:ro
       - vol_api_redis:/data
     networks:
       - laravel-net-db
@@ -20,15 +24,23 @@ services:
   api_db:
     container_name: api_db
     image: postgres:17
-    restart: always
+    restart: unless-stopped
+    shm_size: 1GB                  # 1GB shared_buffers ⇒ /dev/shm 256 MB
     environment:
-      POSTGRES_DB: laravel
-      POSTGRES_USER: laravel
-      POSTGRES_PASSWORD: secret
-    user: 999:999
-    ports:
-      - "5432:5432"
+        POSTGRES_USER: ${DB_USERNAME}
+        POSTGRES_PASSWORD: ${DB_PASSWORD}
+        POSTGRES_DB: ${DB_DATABASE}
+        TZ: ${TZ}
+        PGTZ: ${TZ}
+    command: >
+      -c wal_level=replica
+      -c max_wal_senders=10
+      -c wal_keep_size=512MB
+      -c shared_buffers=512MB
+      -c hot_standby=on
+      -c hba_file=/etc/postgresql/pg_hba.conf
     volumes:
+      - ./.docker/pg17.pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
       - vol_api_pgdata:/var/lib/postgresql/data
       - vol_api_pglog:/var/log/postgresql
     networks:
@@ -42,7 +54,10 @@ services:
     volumes:
       - .docker/build.sh:/var/www/build.sh
       - ./api:/var/www
-      - vol_api_laravel-php-logs:/var/log/php
+      - vol_api_php-logs:/var/log/php
+      - vol_api_laravel-logs:/var/www/storage/logs
+      - vol_api_laravel-views:/var/www/storage/views
+    user: "1000:1000"
     depends_on:
       - api_db
       - api_redis
@@ -65,9 +80,9 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - .:/var/www
-      - ./.docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - vol_api_laravel-nginx-logs:/var/log/nginx
+      - ./api:/var/www
+      - ./.docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - vol_api_nginx-logs:/var/log/nginx
     depends_on:
       - app
     networks:
@@ -92,13 +107,25 @@ volumes:
       type: none
       device: ./data/${ENV_TYPE}/logs/postgres
       o: bind
-  vol_api_laravel-php-logs:
+  vol_api_php-logs:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./data/${ENV_TYPE}/logs/laravel
+      o: bind
+  vol_api_laravel-logs:
     driver: local
     driver_opts:
       type: none
       device: ./data/${ENV_TYPE}/logs/php
       o: bind
-  vol_api_laravel-nginx-logs:
+  vol_api_laravel-views:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./data/${ENV_TYPE}/views/laravel
+      o: bind
+  vol_api_nginx-logs:
     driver: local
     driver_opts:
       type: none
