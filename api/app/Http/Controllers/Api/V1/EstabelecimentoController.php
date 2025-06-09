@@ -7,6 +7,7 @@ use App\Helpers\ApiResponse;
 use App\Models\Estabelecimento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Services\Estabelecimento\EstabelecimentoContext;
 
 class EstabelecimentoController extends Controller
 {
@@ -23,23 +24,23 @@ class EstabelecimentoController extends Controller
         return $this->response->success('Lista de estabelecimentos carregada', $data);
     }
 
+
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'tipo' => 'required|in:cpf,cnpj',
-            'documento' => 'required|string|size:14|unique:estabelecimentos,documento,NULL,id,deleted_at,NULL',
-            'nome' => 'required|string|max:100',
-            'contato' => 'nullable|string|max:100',
-            'email' => 'nullable|email|max:100',
-            'telefone' => 'nullable|string|max:14',
-        ]);
+        $tipo = $request->input('tipo');
 
-        if ($validator->fails()) {
-            return $this->response->error('Erro de validação', $validator->errors(), 422);
+        try {
+            $context = new EstabelecimentoContext($tipo);
+            $result = $context->handle($request);
+
+            if ($result['status']) {
+                return $this->response->success('Estabelecimento criado com sucesso', $result['data'], 201);
+            }
+
+            return $this->response->error('Erro de validação', $result['errors'], 422);
+        } catch (\InvalidArgumentException $e) {
+            return $this->response->error($e->getMessage(), null, 400);
         }
-
-        $estabelecimento = Estabelecimento::create($request->all());
-        return $this->response->success('Estabelecimento criado com sucesso', $estabelecimento, 201);
     }
 
     public function show($uuid)
