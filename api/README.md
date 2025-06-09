@@ -4,10 +4,19 @@
 
 Optei por utilizar o conceito de estabelecimentos, uma vez que temos clientes e fornecedores como um único cadastro.
 
+#### Design Pattern - Strategy
+Foi utilizado o padrão de projeto **Strategy** para implementar a criação de estabelecimentos de forma desacoplada, com base no tipo de documento informado (`cpf` ou `cnpj`).
+
+- Cada tipo de documento possui sua própria classe de estratégia responsável pela validação e persistência.
+- A estratégia correta é selecionada dinamicamente conforme o campo `tipo` enviado na requisição (`cpf` ou `cnpj`).
+- Isso garante que cada regra de negócio fique isolada e facilmente extensível — por exemplo, para adicionar um novo tipo de documento como **passaporte**, basta criar uma nova estratégia.
+- O padrão também reforça o princípio da responsabilidade única e melhora a testabilidade da lógica de criação.
+
 #### CRUD de Estabelecimentos:
 - **Criar Estabelecimento:**
   - Permite o cadastro de estabelecimentos usando CNPJ ou CPF, incluindo informações como nome, contato, e-mail e telefone.
   - Validação rigorosa dos dados de entrada, incluindo formatos e tamanhos.
+  - A estratégia correta é automaticamente aplicada com base no tipo de documento informado (`cpf` ou `cnpj`).
 
 - **Editar Estabelecimento:**
   - Atualiza informações do estabelecimento, mantendo as regras de validação.
