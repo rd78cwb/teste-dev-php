@@ -40,7 +40,7 @@ O objetivo deste teste é desenvolver uma API Rest para o cadastro de fornecedor
 - Documentação do projeto, incluindo um README detalhado com instruções de instalação e operação.
 
 ## Bônus
-- Implementação de Repository Pattern.
+- Implementação de Strategie Pattern.
 - Implementação de testes automatizados.
 - Dockerização do ambiente de desenvolvimento.
 - Implementação de cache para otimizar o desempenho.
